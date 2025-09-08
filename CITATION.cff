@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+title: Domain Event Pattern
+message: >
+  If you use this software, please cite it using the metadata below.
+type: software
+authors:
+  - given-names: Adrià
+    family-names: Montoto
+repository-code: https://github.com/adriamontoto/domain-event-pattern
+url: https://pypi.org/project/domain-event-pattern
+abstract: >
+  The Domain Event Pattern is a Python package that implements the Domain Event
+  pattern from Domain Driven Design. It provides composable building blocks that
+  allow you to model "something happened" in your domain without framework lock-in.
+
+keywords:
+  - python
+  - domain-event
+  - event-bus
+license: MIT
