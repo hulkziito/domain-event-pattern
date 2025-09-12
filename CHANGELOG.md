@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v0.5.0 (2025-09-12)
+
+### ✨ Features
+
+- Implement retry event bus and generic package errors
+  ([`2da1387`](https://github.com/adriamontoto/domain-event-pattern/commit/2da1387934a82782ca52bc7a4ddfd2a0d972011c))
+
+
 ## v0.4.0 (2025-09-12)
 
 ### ✨ Features
