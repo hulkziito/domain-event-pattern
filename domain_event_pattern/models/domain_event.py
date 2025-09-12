@@ -31,7 +31,7 @@ class DomainEvent(BaseModel):
 
     Example:
     ```python
-    from domain_event_pattern.models import DomainEvent, DomainEventSubscriber
+    from domain_event_pattern.models import DomainEvent
 
 
     class UserCreatedEvent(DomainEvent):
@@ -84,7 +84,7 @@ class DomainEvent(BaseModel):
 
         Example:
         ```python
-        from domain_event_pattern.models import DomainEvent, DomainEventSubscriber
+        from domain_event_pattern.models import DomainEvent
 
 
         class UserCreatedEvent(DomainEvent):
@@ -135,7 +135,7 @@ class DomainEvent(BaseModel):
 
         Example:
         ```python
-        from domain_event_pattern.models import DomainEvent, DomainEventSubscriber
+        from domain_event_pattern.models import DomainEvent
 
 
         class UserCreatedEvent(DomainEvent):
@@ -180,7 +180,7 @@ class DomainEvent(BaseModel):
 
         Example:
         ```python
-        from domain_event_pattern.models import DomainEvent, DomainEventSubscriber
+        from domain_event_pattern.models import DomainEvent
 
 
         class UserCreatedEvent(DomainEvent):
@@ -227,7 +227,7 @@ class DomainEvent(BaseModel):
 
         Example:
         ```python
-        from domain_event_pattern.models import DomainEvent, DomainEventSubscriber
+        from domain_event_pattern.models import DomainEvent
 
 
         class UserCreatedEvent(DomainEvent):
@@ -267,7 +267,7 @@ class DomainEvent(BaseModel):
 
         Example:
         ```python
-        from domain_event_pattern.models import DomainEvent, DomainEventSubscriber
+        from domain_event_pattern.models import DomainEvent
 
 
         class UserCreatedEvent(DomainEvent):
@@ -307,7 +307,7 @@ class DomainEvent(BaseModel):
 
         Example:
         ```python
-        from domain_event_pattern.models import DomainEvent, DomainEventSubscriber
+        from domain_event_pattern.models import DomainEvent
 
 
         class UserCreatedEvent(DomainEvent):
