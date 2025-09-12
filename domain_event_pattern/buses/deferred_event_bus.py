@@ -63,6 +63,9 @@ class DeferredEventBus(EventBus):
         """
         Publish all deferred events.
 
+        Raises:
+            PublicationError: If there is an error during publication.
+
         Example:
         ```python
         # TODO:

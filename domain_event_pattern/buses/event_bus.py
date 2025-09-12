@@ -28,6 +28,9 @@ class EventBus(ABC):
         Args:
             events (Sequence[DomainEvent]): Sequence of domain events to publish.
 
+        Raises:
+            PublicationError: If there is an error during publication.
+
         Example:
         ```python
         # TODO:

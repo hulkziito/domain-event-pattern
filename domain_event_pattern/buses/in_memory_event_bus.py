@@ -11,6 +11,7 @@ else:
 
 from typing import Awaitable, Callable, Sequence
 
+from domain_event_pattern.errors import HandlerError, PublicationError
 from domain_event_pattern.models.domain_event import DomainEvent
 from domain_event_pattern.models.domain_event_handler import DomainEventHandler
 from domain_event_pattern.models.domain_event_handler_registry import EventHandlerRegistry
@@ -63,11 +64,16 @@ class InMemoryEventBus(EventBus):
         Args:
             events (Sequence[DomainEvent]): The events to publish.
 
+        Raises:
+            PublicationError: If there is an error during publication.
+
         Example:
         ```python
         # TODO:
         ```
         """
+        errors: list[HandlerError] = []
+
         for event in events:
             handlers = self._handlers.get(event.event_name, [])
             for handler in handlers:
@@ -75,7 +81,10 @@ class InMemoryEventBus(EventBus):
                     await handler(event)
 
                 except Exception as exception:
-                    print(exception)
+                    errors.append(HandlerError(event=event, handler=handler, error=exception))
+
+        if errors:
+            raise PublicationError(errors=errors)
 
     def _subscribe(self, *, event_name: str, handler: DomainEventHandler[DomainEvent]) -> None:
         """
