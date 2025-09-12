@@ -23,7 +23,7 @@ class InMemoryEventBus(EventBus):
     In-memory implementation of the EventBus interface.
 
     This event bus provides a simple, synchronous event publishing mechanism that runs all event handlers in the same
-    process. It automatically discovers and subscribes to all registered domain event subscribers from the
+    process. It automatically discovers and handlers to all registered domain event handlers from the
     EventHandlerRegistry.
 
     The InMemoryEventBus is ideal for:
@@ -38,27 +38,27 @@ class InMemoryEventBus(EventBus):
     ```
     """
 
-    _subscriptions: dict[str, list[Callable[[DomainEvent], Awaitable[None]]]]
+    _handlers: dict[str, list[Callable[[DomainEvent], Awaitable[None]]]]
 
     def __init__(self) -> None:
         """
-        Initialize the event bus with registered subscribers.
+        Initialize the event bus with registered handlers.
 
         Example:
         ```python
         # TODO:
         ```
         """
-        self._subscriptions = {}
+        self._handlers = {}
 
-        for subscriber, event_types in EventHandlerRegistry.subscribers.items():
+        for handler, event_types in EventHandlerRegistry.subscribers.items():
             for event_type in event_types:
-                self._subscribe_handler(event_name=event_type.event_name, handler=subscriber)
+                self._subscribe_handler(event_name=event_type.event_name, handler=handler)
 
     @override
     async def publish(self, *, events: Sequence[DomainEvent]) -> None:
         """
-        Publish a sequence of domain events to all registered subscribers.
+        Publish a sequence of domain events to all registered handlers.
 
         Args:
             events (Sequence[DomainEvent]): The events to publish.
@@ -69,31 +69,31 @@ class InMemoryEventBus(EventBus):
         ```
         """
         for event in events:
-            subscribers = self._subscriptions.get(event.event_name, [])
-            for subscriber in subscribers:
+            handlers = self._handlers.get(event.event_name, [])
+            for handler in handlers:
                 try:
-                    await subscriber(event)
+                    await handler(event)
 
                 except Exception as exception:
                     print(exception)
 
-    def _subscribe(self, *, event_name: str, subscriber: DomainEventHandler[DomainEvent]) -> None:
+    def _subscribe(self, *, event_name: str, handler: DomainEventHandler[DomainEvent]) -> None:
         """
-        Subscribe a domain event subscriber to a specific event.
+        Subscribe a domain event handler to a specific event.
 
         Args:
             event_name (str): The name of the event to subscribe to.
-            subscriber (DomainEventSubscriber[DomainEvent]): The subscriber to register.
+            handler (DomainEventHandler[DomainEvent]): The handler to register.
         """
 
         async def subscription_wrapper(event: DomainEvent) -> None:
-            await subscriber.on(event=event)
+            await handler.on(event=event)
 
-        if event_name in self._subscriptions:
-            self._subscriptions[event_name].append(subscription_wrapper)
+        if event_name in self._handlers:
+            self._handlers[event_name].append(subscription_wrapper)
             return
 
-        self._subscriptions[event_name] = [subscription_wrapper]
+        self._handlers[event_name] = [subscription_wrapper]
 
     def _subscribe_handler(self, *, event_name: str, handler: object) -> None:
         """
@@ -107,8 +107,8 @@ class InMemoryEventBus(EventBus):
         async def subscription_wrapper(event: DomainEvent) -> None:
             await handler.on(event=event)  # type: ignore[attr-defined]
 
-        if event_name in self._subscriptions:
-            self._subscriptions[event_name].append(subscription_wrapper)
+        if event_name in self._handlers:
+            self._handlers[event_name].append(subscription_wrapper)
             return
 
-        self._subscriptions[event_name] = [subscription_wrapper]
+        self._handlers[event_name] = [subscription_wrapper]
