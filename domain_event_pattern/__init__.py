@@ -1,4 +1,4 @@
-__version__ = '0.2.0'
+__version__ = '0.4.0'
 
 from .buses import DeferredEventBus, EventBus, InMemoryEventBus
 from .decorators import handle_events

@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v0.4.0 (2025-09-12)
+
+### ✨ Features
+
+- Implement deferred event bus
+  ([`0cc6dc3`](https://github.com/adriamontoto/domain-event-pattern/commit/0cc6dc3db26e4309eb67154f2e6e0897552386df))
+
+
 ## v0.1.0 (2025-09-11)
 
 ### ✨ Features
