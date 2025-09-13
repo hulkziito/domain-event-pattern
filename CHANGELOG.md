@@ -2,6 +2,17 @@
 
 <!-- version list -->
 
+## v0.6.0 (2025-09-13)
+
+### ✨ Features
+
+- Implement aggregate_identifier property in DomainEvent
+  ([`9500ef5`](https://github.com/adriamontoto/domain-event-pattern/commit/9500ef5542b7d01601a1e2e2f87b34db112e823f))
+
+- Implement logging for failed event handler retries in RetryEventBus
+  ([`1296c74`](https://github.com/adriamontoto/domain-event-pattern/commit/1296c74d887f260fb5d9c2a0e637580a1ef81423))
+
+
 ## v0.5.0 (2025-09-12)
 
 ### ✨ Features
