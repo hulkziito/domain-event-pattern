@@ -89,6 +89,10 @@ class RetryEventBus(EventBus):
         except PublicationError as exception:
             errors = await self._retry_errors(publication_error=exception)
             if errors:
+                for error in errors:
+                    print(f'Handler {error.handler.__name__} failed for event {error.event.event_name} after retries.')
+                    print(error.error)
+
                 raise PublicationError(errors=errors) from exception
 
     async def _retry_errors(self, *, publication_error: PublicationError) -> list[HandlerError]:
