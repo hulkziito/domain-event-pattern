@@ -18,6 +18,7 @@ from uuid import uuid4
 from value_object_pattern import BaseModel
 from value_object_pattern.decorators import classproperty
 
+from .domain_event_aggregate_identifier import DomainEventAggregateIdentifier
 from .domain_event_identifier import DomainEventIdentifier
 from .domain_event_name import DomainEventName
 from .domain_event_occurred_datetime import DomainEventOccurredDatetime
@@ -31,33 +32,12 @@ class DomainEvent(BaseModel):
 
     Example:
     ```python
-    from domain_event_pattern.models import DomainEvent
-
-
-    class UserCreatedEvent(DomainEvent):
-        _event_name = 'user.created'
-        _user_identifier: str
-        _email: str
-
-        def __init__(
-            self,
-            user_identifier: str,
-            email: str,
-            identifier: str | None = None,
-            occurred_datetime: str | None = None,
-        ) -> None:
-            super().__init__(identifier=identifier, occurred_datetime=occurred_datetime)
-            self._user_identifier = user_identifier
-            self._email = email
-
-
-    event = UserCreatedEvent(user_identifier='user-123', email='john@example.com')
-    print(event)
-    # >>> UserCreatedEvent(data={'user_identifier': 'user-123', 'email': 'john@example.com'}, event_name=user.created, identifier=4b5fb882-9d39-4179-94d3-c1d39785b774, occurred_datetime=2025-09-11T18:11:41.008191+00:00)
+    # TODO:
     ```
     """  # noqa: E501  # fmt: skip
 
     _identifier: DomainEventIdentifier
+    _aggregate_identifier: DomainEventAggregateIdentifier
     _event_name: str | None  # Define this attribute in subclasses
     _occurred_datetime: DomainEventOccurredDatetime
 
@@ -71,12 +51,19 @@ class DomainEvent(BaseModel):
         if hasattr(cls, '_event_name') and cls._event_name is not None:
             DomainEventName(value=cls._event_name, title=cls.__name__, parameter='_event_name')
 
-    def __init__(self, *, identifier: str | None = None, occurred_datetime: str | None = None) -> None:
+    def __init__(
+        self,
+        *,
+        aggregate_identifier: str,
+        identifier: str | None = None,
+        occurred_datetime: str | None = None,
+    ) -> None:
         """
         Initialize a domain event.
 
         Args:
             identifier (str | None, optional): The unique identifier for the event. Defaults to random UUIDv4.
+            aggregate_identifier (str): The identifier of the aggregate root associated with the event.
             occurred_datetime (str | None, optional): When the event occurred. Defaults to UTC now.
 
         Raises:
@@ -84,29 +71,7 @@ class DomainEvent(BaseModel):
 
         Example:
         ```python
-        from domain_event_pattern.models import DomainEvent
-
-
-        class UserCreatedEvent(DomainEvent):
-            _event_name = 'user.created'
-            _user_identifier: str
-            _email: str
-
-            def __init__(
-                self,
-                user_identifier: str,
-                email: str,
-                identifier: str | None = None,
-                occurred_datetime: str | None = None,
-            ) -> None:
-                super().__init__(identifier=identifier, occurred_datetime=occurred_datetime)
-                self._user_identifier = user_identifier
-                self._email = email
-
-
-        event = UserCreatedEvent(user_identifier='user-123', email='john@example.com')
-        print(event)
-        # >>> UserCreatedEvent(data={'user_identifier': 'user-123', 'email': 'john@example.com'}, event_name=user.created, identifier=4b5fb882-9d39-4179-94d3-c1d39785b774, occurred_datetime=2025-09-11T18:11:41.008191+00:00)
+        # TODO:
         ```
         """  # noqa: E501  # fmt: skip
         if self._event_name is None:
@@ -118,6 +83,7 @@ class DomainEvent(BaseModel):
         if occurred_datetime is None:
             occurred_datetime = datetime.now(tz=UTC).isoformat()
 
+        self._aggregate_identifier = DomainEventAggregateIdentifier(value=aggregate_identifier, title='DomainEvent', parameter='aggregate_identifier')  # noqa: E501  # fmt: skip
         self._identifier = DomainEventIdentifier(value=identifier, title='DomainEvent', parameter='identifier')
         self._occurred_datetime = DomainEventOccurredDatetime(value=occurred_datetime, title='DomainEvent', parameter='occurred_datetime')  # noqa: E501  # fmt: skip
 
@@ -135,40 +101,24 @@ class DomainEvent(BaseModel):
 
         Example:
         ```python
-        from domain_event_pattern.models import DomainEvent
-
-
-        class UserCreatedEvent(DomainEvent):
-            _event_name = 'user.created'
-            _user_identifier: str
-            _email: str
-
-            def __init__(
-                self,
-                user_identifier: str,
-                email: str,
-                identifier: str | None = None,
-                occurred_datetime: str | None = None,
-            ) -> None:
-                super().__init__(identifier=identifier, occurred_datetime=occurred_datetime)
-                self._user_identifier = user_identifier
-                self._email = email
-
-
-        event = UserCreatedEvent.from_primitives({'event_name': 'user.created', 'identifier': '4b5fb882-9d39-4179-94d3-c1d39785b774', 'occurred_datetime': '2025-09-11T18:11:41.008191+00:00', 'data': {'user_identifier': 'user-123', 'email': 'john@example.com'}})
-        print(event)
-        # >>> UserCreatedEvent(data={'user_identifier': 'user-123', 'email': 'john@example.com'}, event_name=user.created, identifier=4b5fb882-9d39-4179-94d3-c1d39785b774, occurred_datetime=2025-09-11T18:11:41.008191+00:00)
+        # TODO:
         ```
         """  # noqa: E501  # fmt: skip
         event_name = primitives.get('event_name')
         identifier = primitives.get('identifier')
+        aggregate_identifier = primitives.get('aggregate_identifier')
         occurred_datetime = primitives.get('occurred_datetime')
         event_data = primitives.get('data', {})
 
         if event_name != cls.event_name:
             raise ValueError(f'DomainEvent event_name mismatch expected <<<{cls.event_name}>>> got <<<{event_name}>>>.')
 
-        return cls(identifier=identifier, occurred_datetime=occurred_datetime, **event_data)
+        return cls(
+            identifier=identifier,
+            aggregate_identifier=aggregate_identifier,  # type: ignore[arg-type]
+            occurred_datetime=occurred_datetime,
+            **event_data,
+        )
 
     @override
     def to_primitives(self) -> dict[str, Any]:
@@ -180,39 +130,19 @@ class DomainEvent(BaseModel):
 
         Example:
         ```python
-        from domain_event_pattern.models import DomainEvent
-
-
-        class UserCreatedEvent(DomainEvent):
-            _event_name = 'user.created'
-            _user_identifier: str
-            _email: str
-
-            def __init__(
-                self,
-                user_identifier: str,
-                email: str,
-                identifier: str | None = None,
-                occurred_datetime: str | None = None,
-            ) -> None:
-                super().__init__(identifier=identifier, occurred_datetime=occurred_datetime)
-                self._user_identifier = user_identifier
-                self._email = email
-
-
-        event = UserCreatedEvent(user_identifier='user-123', email='john@example.com')
-        print(event.to_primitives())
-        # >>> {'event_name': 'user.created', 'identifier': '4b5fb882-9d39-4179-94d3-c1d39785b774', 'occurred_datetime': '2025-09-11T18:11:41.008191+00:00', 'data': {'user_identifier': 'user-123', 'email': 'john@example.com'}}
+        # TODO:
         ```
         """  # noqa: E501  # fmt: skip
         event_data = super().to_primitives()
         event_data.pop('event_name', None)
         event_data.pop('identifier', None)
+        event_data.pop('aggregate_identifier', None)
         event_data.pop('occurred_datetime', None)
 
         return {
             'event_name': self.event_name,
             'identifier': self.identifier,
+            'aggregate_identifier': self.aggregate_identifier,
             'occurred_datetime': self.occurred_datetime,
             'data': event_data,
         }
@@ -227,32 +157,25 @@ class DomainEvent(BaseModel):
 
         Example:
         ```python
-        from domain_event_pattern.models import DomainEvent
-
-
-        class UserCreatedEvent(DomainEvent):
-            _event_name = 'user.created'
-            _user_identifier: str
-            _email: str
-
-            def __init__(
-                self,
-                user_identifier: str,
-                email: str,
-                identifier: str | None = None,
-                occurred_datetime: str | None = None,
-            ) -> None:
-                super().__init__(identifier=identifier, occurred_datetime=occurred_datetime)
-                self._user_identifier = user_identifier
-                self._email = email
-
-
-        event = UserCreatedEvent(user_identifier='user-123', email='john@example.com')
-        print(event.identifier)
-        # >>> 4b5fb882-9d39-4179-94d3-c1d39785b774
+        # TODO:
         ```
         """  # noqa: E501  # fmt: skip
         return self._identifier.value
+
+    @property
+    def aggregate_identifier(self) -> str:
+        """
+        Get the identifier of the aggregate root associated with the event.
+
+        Returns:
+            str: The identifier of the aggregate root associated with the event.
+
+        Example:
+        ```python
+        # TODO:
+        ```
+        """
+        return self._aggregate_identifier.value
 
     @classproperty
     def event_name(self) -> str:
@@ -267,29 +190,7 @@ class DomainEvent(BaseModel):
 
         Example:
         ```python
-        from domain_event_pattern.models import DomainEvent
-
-
-        class UserCreatedEvent(DomainEvent):
-            _event_name = 'user.created'
-            _user_identifier: str
-            _email: str
-
-            def __init__(
-                self,
-                user_identifier: str,
-                email: str,
-                identifier: str | None = None,
-                occurred_datetime: str | None = None,
-            ) -> None:
-                super().__init__(identifier=identifier, occurred_datetime=occurred_datetime)
-                self._user_identifier = user_identifier
-                self._email = email
-
-
-        event = UserCreatedEvent(user_identifier='user-123', email='john@example.com')
-        print(event.event_name)
-        # >>> user.created
+        # TODO:
         ```
         """  # noqa: E501  # fmt: skip
         if not hasattr(self, '_event_name') or self._event_name is None:
@@ -307,29 +208,7 @@ class DomainEvent(BaseModel):
 
         Example:
         ```python
-        from domain_event_pattern.models import DomainEvent
-
-
-        class UserCreatedEvent(DomainEvent):
-            _event_name = 'user.created'
-            _user_identifier: str
-            _email: str
-
-            def __init__(
-                self,
-                user_identifier: str,
-                email: str,
-                identifier: str | None = None,
-                occurred_datetime: str | None = None,
-            ) -> None:
-                super().__init__(identifier=identifier, occurred_datetime=occurred_datetime)
-                self._user_identifier = user_identifier
-                self._email = email
-
-
-        event = UserCreatedEvent(user_identifier='user-123', email='john@example.com')
-        print(event.occurred_datetime)
-        # >>> 2025-09-11T18:11:41.008191+00:00
+        # TODO:
         ```
         """  # noqa: E501  # fmt: skip
         return self._occurred_datetime.value
